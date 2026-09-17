@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Cronómetros</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱️</text></svg>">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root {
+      --flokzu-card: #ffffff;
+      --flokzu-primary: #ec4899;
+      --flokzu-primary-hover: #db2777;
+      --flokzu-light: #fce7f3;
+      --flokzu-border: #f9a8d4;
+      --flokzu-text: #831843;
+      --flokzu-muted: #be185d;
+
+      --segur-card: #0f172a;
+      --segur-primary: #38bdf8;
+      --segur-primary-hover: #0ea5e9;
+      --segur-light: #1e293b;
+      --segur-border: #1e40af;
+      --segur-text: #e2e8f0;
+      --segur-muted: #7dd3fc;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      gap: 24px;
+      background: linear-gradient(135deg, #fdf2f8 0%, #e0e7ff 30%, #bae6fd 60%, #f0abfc 100%);
+      background-attachment: fixed;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: center;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    @media (min-width: 640px) {
+      .container { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 1.75rem; }
+    }
+
+    .card {
+      border-radius: 20px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover { transform: translateY(-2px); }
+
+    .card--flokzu {
+      background: var(--flokzu-card);
+      border: 2px solid var(--flokzu-border);
+      box-shadow: 0 4px 24px rgba(236, 72, 153, 0.1);
+    }
+    .card--flokzu:hover { box-shadow: 0 8px 32px rgba(236, 72, 153, 0.2); }
+    .card--flokzu .card__title { color: var(--flokzu-text); }
+    .card--flokzu .card__timer { color: var(--flokzu-primary); }
+    .card--flokzu .card__status { color: var(--flokzu-muted); }
+    .card--flokzu .card__status--active { color: #16a34a; }
+    .card--flokzu .btn { background: var(--flokzu-primary); color: #fff; }
+    .card--flokzu .btn:hover { background: var(--flokzu-primary-hover); }
+    .card--flokzu .btn--danger { background: #f43f5e; }
+    .card--flokzu .btn--danger:hover { background: #e11d48; }
+    .card--flokzu .adjust__input {
+      border: 2px solid var(--flokzu-border);
+      color: var(--flokzu-text);
+    }
+    .card--flokzu .adjust__input:focus {
+      border-color: var(--flokzu-primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+    }
+    .card--flokzu .btn--plus { background: #16a34a; }
+    .card--flokzu .btn--plus:hover { background: #15803d; }
+    .card--flokzu .btn--minus { background: #f97316; }
+    .card--flokzu .btn--minus:hover { background: #ea580c; }
+
+    .card--segur {
+      background: var(--segur-card);
+      border: 2px solid var(--segur-border);
+      box-shadow: 0 4px 24px rgba(56, 189, 248, 0.08);
+    }
+    .card--segur:hover { box-shadow: 0 8px 32px rgba(56, 189, 248, 0.15); }
+    .card--segur .card__title { color: var(--segur-text); }
+    .card--segur .card__timer { color: #ffffff; text-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+    .card--segur .card__status { color: #94a3b8; }
+    .card--segur .card__status--active { color: #4ade80; }
+    .card--segur .btn { background: var(--segur-primary); color: #020617; }
+    .card--segur .btn:hover { background: var(--segur-primary-hover); }
+    .card--segur .btn--danger { background: #ef4444; color: #fff; }
+    .card--segur .btn--danger:hover { background: #dc2626; }
+    .card--segur .adjust__input {
+      border: 2px solid #334155;
+      background: #1e293b;
+      color: var(--segur-text);
+    }
+    .card--segur .adjust__input:focus {
+      border-color: var(--segur-primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+    .card--segur .adjust label { color: #94a3b8; }
+    .card--segur .week-label { color: #64748b; }
+    .card--segur .btn--plus { background: #16a34a; color: #fff; }
+    .card--segur .btn--plus:hover { background: #15803d; }
+    .card--segur .btn--minus { background: #f97316; color: #fff; }
+    .card--segur .btn--minus:hover { background: #ea580c; }
+
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .card__timer {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 12px 0;
+      user-select: none;
+    }
+
+    @media (min-width: 640px) {
+      .card__timer { font-size: 3.2rem; }
+    }
+
+    .card__status {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      min-height: 1.2em;
+    }
+
+    .card__status--active { animation: pulse 1.5s ease-in-out infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:active { transform: scale(0.96); }
+
+    .adjust {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .adjust__row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .adjust__input {
+      width: 90px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .adjust__input::placeholder { opacity: 0.5; }
+
+    .adjust label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+
+    .week-label {
+      font-size: 0.75rem;
+      opacity: 0.5;
+      margin-top: -4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Panel de Control Semanal</h1>
+
+  <div class="container">
+    <div class="card card--flokzu">
+      <div class="card__title">Flokzu</div>
+      <div class="card__status" id="status-flokzu">Detenido</div>
+      <div class="card__timer" id="timer-flokzu">00:00:00</div>
+      <div class="week-label" id="week-flokzu">Semana actual</div>
+      <div class="controls">
+        <button class="btn" id="start-flokzu" onclick="toggleTimer('flokzu')">▶ Iniciar</button>
+        <button class="btn btn--danger" id="reset-flokzu" onclick="resetTimer('flokzu')">↺ Reiniciar</button>
+      </div>
+      <div class="adjust">
+        <div class="adjust__row">
+          <label for="adjust-flokzu">Ajuste manual (hh:mm):</label>
+          <input type="text" id="adjust-flokzu" class="adjust__input" placeholder="01:30" maxlength="5" inputmode="numeric">
+        </div>
+        <div class="adjust__row">
+          <button class="btn btn--plus" onclick="adjustTime('flokzu', 1)">+ Sumar</button>
+          <button class="btn btn--minus" onclick="adjustTime('flokzu', -1)">− Restar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card--segur">
+      <div class="card__title">Seguridad de la Información</div>
+      <div class="card__status" id="status-segur">Detenido</div>
+      <div class="card__timer" id="timer-segur">00:00:00</div>
+      <div class="week-label" id="week-segur">Semana actual</div>
+      <div class="controls">
+        <button class="btn" id="start-segur" onclick="toggleTimer('segur')">▶ Iniciar</button>
+        <button class="btn btn--danger" id="reset-segur" onclick="resetTimer('segur')">↺ Reiniciar</button>
+      </div>
+      <div class="adjust">
+        <div class="adjust__row">
+          <label for="adjust-segur">Ajuste manual (hh:mm):</label>
+          <input type="text" id="adjust-segur" class="adjust__input" placeholder="01:30" maxlength="5" inputmode="numeric">
+        </div>
+        <div class="adjust__row">
+          <button class="btn btn--plus" onclick="adjustTime('segur', 1)">+ Sumar</button>
+          <button class="btn btn--minus" onclick="adjustTime('segur', -1)">− Restar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_PREFIX = 'cronometro_';
+    const timers = {};
+
+    function getState(id) {
+      const raw = localStorage.getItem(STORAGE_PREFIX + id);
+      if (raw) return JSON.parse(raw);
+      return { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart() };
+    }
+
+    function saveState(id, state) {
+      localStorage.setItem(STORAGE_PREFIX + id, JSON.stringify(state));
+    }
+
+    function getWeekStart() {
+      const now = new Date();
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(now);
+      monday.setDate(diff);
+      monday.setHours(0, 0, 0, 0);
+      return monday.getTime();
+    }
+
+    function formatTime(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    function getElapsed(state) {
+      let elapsed = state.elapsed;
+      if (state.running && state.lastStart) {
+        elapsed += Math.floor((Date.now() - state.lastStart) / 1000);
+      }
+      return elapsed;
+    }
+
+    function updateDisplay(id) {
+      const state = getState(id);
+      const elapsed = getElapsed(state);
+      document.getElementById('timer-' + id).textContent = formatTime(elapsed);
+      const statusEl = document.getElementById('status-' + id);
+      const btnEl = document.getElementById('start-' + id);
+
+      if (state.running) {
+        statusEl.textContent = '● En ejecución';
+        statusEl.className = 'card__status card__status--active';
+        btnEl.innerHTML = '⏸ Pausar';
+      } else {
+        statusEl.textContent = 'Detenido';
+        statusEl.className = 'card__status';
+        btnEl.innerHTML = '▶ Iniciar';
+      }
+
+      const weekStart = new Date(state.weekStart);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 6);
+      const opts = { day: '2-digit', month: 'short' };
+      document.getElementById('week-' + id).textContent =
+        weekStart.toLocaleDateString('es', opts) + ' – ' + weekEnd.toLocaleDateString('es', opts);
+    }
+
+    function toggleTimer(id) {
+      const state = getState(id);
+      if (state.running) {
+        state.elapsed += Math.floor((Date.now() - state.lastStart) / 1000);
+        state.running = false;
+        state.lastStart = null;
+      } else {
+        state.running = true;
+        state.lastStart = Date.now();
+      }
+      saveState(id, state);
+      updateDisplay(id);
+    }
+
+    function resetTimer(id) {
+      if (!confirm('¿Reiniciar el cronómetro a 00:00:00?')) return;
+      saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart() });
+      updateDisplay(id);
+    }
+
+    function adjustTime(id, direction) {
+      const input = document.getElementById('adjust-' + id);
+      const raw = input.value.trim();
+      if (!raw) return;
+
+      let hours = 0, minutes = 0;
+      if (raw.includes(':')) {
+        const parts = raw.split(':');
+        hours = parseInt(parts[0], 10) || 0;
+        minutes = parseInt(parts[1], 10) || 0;
+      } else {
+        hours = parseInt(raw, 10) || 0;
+      }
+
+      if (hours < 0 || minutes < 0 || minutes > 59) {
+        alert('Formato invalido. Usa hh:mm (ej: 01:30)');
+        return;
+      }
+
+      const totalSeconds = (hours * 3600 + minutes * 60) * direction;
+      const state = getState(id);
+      let elapsed = getElapsed(state) + totalSeconds;
+      if (elapsed < 0) elapsed = 0;
+
+      saveState(id, { elapsed, running: false, lastStart: null, weekStart: state.weekStart });
+      updateDisplay(id);
+      input.value = '';
+    }
+
+    function checkWeekRollover(id) {
+      const state = getState(id);
+      const currentWeek = getWeekStart();
+      if (state.weekStart !== currentWeek) {
+        saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: currentWeek });
+      }
+    }
+
+    ['flokzu', 'segur'].forEach(id => {
+      checkWeekRollover(id);
+      setInterval(() => updateDisplay(id), 1000);
+      updateDisplay(id);
+      document.getElementById('adjust-' + id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') adjustTime(id, 1);
+      });
+    });
+  </script>
+</body>
+</html>
