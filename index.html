@@ -225,6 +225,217 @@
       opacity: 0.5;
       margin-top: -4px;
     }
+
+    /* Export bar */
+    .export-bar {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 900px;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn--export {
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn--export:hover { background: #4f46e5; }
+    .btn--export:active { transform: scale(0.96); }
+
+    .btn--autosave {
+      background: transparent;
+      color: #6366f1;
+      border: 2px solid #6366f1;
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn--autosave:hover { background: #eef2ff; }
+
+    .autosave-status {
+      font-size: 0.75rem;
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    /* History */
+    .history {
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+
+    .history__title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .history__empty {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      padding: 20px 0;
+    }
+
+    .history__item {
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      border-left: 4px solid;
+    }
+    .history__item--flokzu {
+      background: #fdf2f8;
+      border-left-color: #ec4899;
+    }
+    .history__item--segur {
+      background: #0f172a;
+      border-left-color: #38bdf8;
+    }
+    .history__item--segur .history__meta { color: #94a3b8; }
+    .history__item--segur .history__desc { color: #e2e8f0; }
+
+    .history__meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .history__desc {
+      font-size: 0.9rem;
+      color: #1e293b;
+      word-break: break-word;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: modalIn 0.2s ease;
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal__badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+      align-self: flex-start;
+    }
+    .modal__badge--flokzu { background: #ec4899; }
+    .modal__badge--segur { background: #0ea5e9; }
+
+    .modal__duration {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: center;
+    }
+
+    .modal__textarea {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      box-sizing: border-box;
+    }
+    .modal__textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+    }
+
+    .modal__actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn--modal-save {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn--modal-save:hover { background: #15803d; }
+
+    .btn--modal-skip {
+      background: #f1f5f9;
+      color: #64748b;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn--modal-skip:hover { background: #e2e8f0; }
   </style>
 </head>
 <body>
@@ -274,8 +485,35 @@
     </div>
   </div>
 
+  <div class="export-bar">
+    <button class="btn--export" onclick="downloadDiario()">📥 Descargar diario</button>
+    <button class="btn--export" onclick="downloadSemanal()">📥 Descargar semanal</button>
+    <button class="btn--autosave" id="autosaveBtn" onclick="setupAutoSave()">📁 Auto-guardado</button>
+    <span class="autosave-status" id="autosaveStatus" style="display:none;">✅ Guardado automático activo</span>
+  </div>
+
+  <div class="history">
+    <div class="history__title">Historial de registros</div>
+    <div id="historyList">
+      <p class="history__empty">Sin registros todavía. Pausa un cronómetro para registrar.</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="logModal">
+    <div class="modal">
+      <span class="modal__badge" id="modalBadge">Flokzu</span>
+      <div class="modal__duration" id="modalDuration">0m</div>
+      <textarea class="modal__textarea" id="modalTextarea" placeholder="¿Qué hiciste en este periodo?" rows="3"></textarea>
+      <div class="modal__actions">
+        <button class="btn--modal-skip" onclick="closeLogModal()">Omitir</button>
+        <button class="btn--modal-save" onclick="saveLogFromModal()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const STORAGE_PREFIX = 'cronometro_';
+    const TIMER_NAMES = { flokzu: 'Flokzu', segur: 'Seguridad de la Información' };
     const timers = {};
 
     function getState(id) {
@@ -288,8 +526,8 @@
       localStorage.setItem(STORAGE_PREFIX + id, JSON.stringify(state));
     }
 
-    function getWeekStart() {
-      const now = new Date();
+    function getWeekStart(date) {
+      const now = date || new Date();
       const day = now.getDay();
       const diff = now.getDate() - day + (day === 0 ? -6 : 1);
       const monday = new Date(now);
@@ -341,15 +579,21 @@
     function toggleTimer(id) {
       const state = getState(id);
       if (state.running) {
-        state.elapsed += Math.floor((Date.now() - state.lastStart) / 1000);
+        const sessionSeconds = Math.floor((Date.now() - state.lastStart) / 1000);
+        state.elapsed += sessionSeconds;
         state.running = false;
         state.lastStart = null;
+        saveState(id, state);
+        updateDisplay(id);
+        if (sessionSeconds > 0) {
+          showLogModal(id, sessionSeconds);
+        }
       } else {
         state.running = true;
         state.lastStart = Date.now();
+        saveState(id, state);
+        updateDisplay(id);
       }
-      saveState(id, state);
-      updateDisplay(id);
     }
 
     function resetTimer(id) {
@@ -385,6 +629,11 @@
       saveState(id, { elapsed, running: false, lastStart: null, weekStart: state.weekStart });
       updateDisplay(id);
       input.value = '';
+
+      const absSeconds = Math.abs(hours * 3600 + minutes * 60);
+      if (absSeconds > 0) {
+        showLogModal(id, absSeconds, direction > 0 ? '+' : '\u2212');
+      }
     }
 
     function checkWeekRollover(id) {
@@ -395,6 +644,306 @@
       }
     }
 
+    // ===== LOGGING =====
+    let pendingLog = null;
+
+    function getLogs() {
+      try { return JSON.parse(localStorage.getItem('cronometro_logs') || '[]'); }
+      catch { return []; }
+    }
+
+    function formatDateTime(d) {
+      return d.toLocaleDateString('es', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+        ' ' + d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatLegible(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      if (h > 0 && m > 0) return h + 'h ' + String(m).padStart(2, '0') + 'm (' + (h + m / 60).toFixed(1) + ' hrs)';
+      if (h > 0) return h + 'h 00m (' + h + '.0 hrs)';
+      return m + 'm';
+    }
+
+    function formatShortLegible(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      if (h > 0 && m > 0) return (h + m / 60).toFixed(1) + ' hrs';
+      if (h > 0) return h + '.0 hrs';
+      if (m > 0) return m + ' min';
+      return seconds + ' seg';
+    }
+
+    // ===== MODAL =====
+    function showLogModal(timerId, seconds, sign) {
+      pendingLog = { id: timerId, seconds: Math.abs(seconds) };
+      const badge = document.getElementById('modalBadge');
+      badge.textContent = TIMER_NAMES[timerId];
+      badge.className = 'modal__badge modal__badge--' + timerId;
+      const displaySign = sign || '';
+      document.getElementById('modalDuration').textContent = displaySign + formatLegible(Math.abs(seconds));
+      document.getElementById('modalTextarea').value = '';
+      document.getElementById('logModal').classList.add('active');
+      setTimeout(() => document.getElementById('modalTextarea').focus(), 100);
+    }
+
+    function closeLogModal() {
+      document.getElementById('logModal').classList.remove('active');
+      pendingLog = null;
+    }
+
+    function saveLogFromModal() {
+      if (!pendingLog) return;
+      const desc = document.getElementById('modalTextarea').value.trim();
+      const now = new Date();
+      const log = {
+        id: pendingLog.id,
+        timestamp: now.getTime(),
+        fecha: formatDateTime(now),
+        duracion_seg: pendingLog.seconds,
+        duracion_legible: formatShortLegible(pendingLog.seconds),
+        descripcion: desc || '(sin descripción)'
+      };
+
+      const logs = getLogs();
+      logs.push(log);
+      localStorage.setItem('cronometro_logs', JSON.stringify(logs));
+
+      renderHistory();
+      closeLogModal();
+
+      if (localStorage.getItem('cronometro_autosave') === 'true') {
+        tryAppendToFile('diario.txt', formatDiarioEntry(log));
+      }
+    }
+
+    // ===== HISTORY =====
+    function renderHistory() {
+      const logs = getLogs();
+      const container = document.getElementById('historyList');
+      if (logs.length === 0) {
+        container.innerHTML = '<p class="history__empty">Sin registros todavía. Pausa un cronómetro para registrar.</p>';
+        return;
+      }
+      const recent = logs.slice(-15).reverse();
+      container.innerHTML = recent.map(log => {
+        return '<div class="history__item history__item--' + log.id + '">' +
+          '<div class="history__meta">' +
+            '<span>' + escapeHtml(log.fecha) + '</span>' +
+            '<span>' + (log.id === 'flokzu' ? 'Flokzu' : 'Seguridad') + '</span>' +
+            '<span>' + escapeHtml(log.duracion_legible) + '</span>' +
+          '</div>' +
+          '<div class="history__desc">' + escapeHtml(log.descripcion) + '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ===== FILE OPERATIONS (Chrome/Edge) =====
+    function openIdb() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open('cronometro_files', 1);
+        req.onupgradeneeded = () => req.result.createObjectStore('handles');
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbGet(key) {
+      const db = await openIdb();
+      return new Promise((resolve, reject) => {
+        const req = db.transaction('handles', 'readonly').objectStore('handles').get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbSet(key, value) {
+      const db = await openIdb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('handles', 'readwrite');
+        tx.objectStore('handles').put(value, key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function setupAutoSave() {
+      if (!window.showDirectoryPicker) {
+        alert('Tu navegador no soporta guardado automático.\nUsa los botones "Descargar" para guardar los archivos manualmente.');
+        return;
+      }
+      try {
+        const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        await idbSet('dirHandle', dirHandle);
+        localStorage.setItem('cronometro_autosave', 'true');
+        updateAutoSaveUI();
+      } catch (e) { /* User cancelled */ }
+    }
+
+    async function tryAppendToFile(filename, content) {
+      if (!window.showDirectoryPicker) return;
+      try {
+        let dirHandle = await idbGet('dirHandle');
+        if (!dirHandle) return;
+        let perm = await dirHandle.queryPermission({ mode: 'readwrite' });
+        if (perm !== 'granted') {
+          perm = await dirHandle.requestPermission({ mode: 'readwrite' });
+        }
+        if (perm !== 'granted') return;
+        const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
+        const file = await fileHandle.getFile();
+        const existing = await file.text();
+        const writable = await fileHandle.createWritable({ keepExistingData: true });
+        await writable.write(existing + content);
+        await writable.close();
+      } catch (e) { /* Skip silently */ }
+    }
+
+    function updateAutoSaveUI() {
+      const active = localStorage.getItem('cronometro_autosave') === 'true';
+      document.getElementById('autosaveBtn').style.display = active ? 'none' : '';
+      document.getElementById('autosaveStatus').style.display = active ? '' : 'none';
+    }
+
+    // ===== WEEKLY CONSOLIDATION =====
+    function checkWeeklyConsolidation() {
+      const lastConsolidated = parseInt(localStorage.getItem('cronometro_consolidated') || '0');
+      const currentWeekStart = getWeekStart();
+      if (lastConsolidated >= currentWeekStart) return;
+
+      const logs = getLogs();
+      const toConsolidate = logs.filter(l => l.timestamp >= lastConsolidated && l.timestamp < currentWeekStart);
+
+      if (toConsolidate.length > 0) {
+        const weeks = {};
+        toConsolidate.forEach(log => {
+          const ws = getWeekStart(new Date(log.timestamp));
+          (weeks[ws] = weeks[ws] || []).push(log);
+        });
+        Object.keys(weeks).forEach(ws => {
+          const summary = formatWeeklySummary(weeks[ws], parseInt(ws));
+          if (localStorage.getItem('cronometro_autosave') === 'true') {
+            tryAppendToFile('semanal.txt', summary);
+          }
+        });
+      }
+
+      localStorage.setItem('cronometro_consolidated', String(currentWeekStart));
+    }
+
+    // ===== FORMATTING FOR FILES =====
+    function formatDiarioEntry(log) {
+      const name = log.id === 'flokzu' ? 'Flokzu' : 'Seguridad';
+      return '[' + log.fecha + '] ' + name + ' - ' + log.duracion_legible + '\n  → ' + log.descripcion + '\n\n';
+    }
+
+    function formatWeeklySummary(logs, weekStart) {
+      const ws = new Date(weekStart);
+      const we = new Date(weekStart);
+      we.setDate(we.getDate() + 6);
+      const opts = { day: '2-digit', month: '2-digit' };
+      const weekNum = getWeekNumber(ws);
+
+      let flokzuTotal = 0, segurTotal = 0;
+      logs.forEach(l => {
+        if (l.id === 'flokzu') flokzuTotal += l.duracion_seg;
+        else segurTotal += l.duracion_seg;
+      });
+      const total = flokzuTotal + segurTotal;
+
+      let txt = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+      txt += ' SEMANA ' + weekNum + ' (' + ws.toLocaleDateString('es', opts) + ' - ' + we.toLocaleDateString('es', opts) + '/' + we.getFullYear() + ')\n';
+      txt += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+      txt += ' [Flokzu]           ' + formatShortLegible(flokzuTotal) + '\n';
+      txt += ' [Seguridad]        ' + formatShortLegible(segurTotal) + '\n';
+      txt += ' ─────────────────────────────────\n';
+      txt += ' TOTAL ' + formatShortLegible(total) + '\n\n';
+      txt += ' Detalles:\n';
+      logs.forEach(l => {
+        const name = l.id === 'flokzu' ? 'Flokzu' : 'Seguridad';
+        txt += ' • ' + l.fecha + ' - ' + name + ' - ' + l.duracion_legible + ': ' + l.descripcion + '\n';
+      });
+      txt += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+      return txt;
+    }
+
+    function getWeekNumber(date) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
+
+    // ===== DOWNLOAD =====
+    function downloadFile(filename, content) {
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadDiario() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const logs = getLogs().filter(l => l.timestamp >= today.getTime());
+
+      if (logs.length === 0) {
+        alert('No hay registros para hoy.');
+        return;
+      }
+
+      const dateStr = new Date().toLocaleDateString('es', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      let txt = '========================================\n';
+      txt += ' REGISTRO DIARIO - ' + dateStr + '\n';
+      txt += '========================================\n\n';
+
+      let flokzuTotal = 0, segurTotal = 0;
+      logs.forEach(l => {
+        txt += formatDiarioEntry(l);
+        if (l.id === 'flokzu') flokzuTotal += l.duracion_seg;
+        else segurTotal += l.duracion_seg;
+      });
+
+      txt += '----------------------------------------\n';
+      txt += ' Flokzu:    ' + formatShortLegible(flokzuTotal) + '\n';
+      txt += ' Seguridad: ' + formatShortLegible(segurTotal) + '\n';
+      txt += ' Total:     ' + formatShortLegible(flokzuTotal + segurTotal) + '\n';
+
+      downloadFile('diario.txt', txt);
+    }
+
+    function downloadSemanal() {
+      const weekStart = getWeekStart();
+      const logs = getLogs().filter(l => l.timestamp >= weekStart);
+
+      if (logs.length === 0) {
+        alert('No hay registros esta semana.');
+        return;
+      }
+
+      const txt = formatWeeklySummary(logs, weekStart);
+      downloadFile('semanal.txt', txt);
+    }
+
+    // ===== KEYBOARD SHORTCUTS =====
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLogModal();
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && pendingLog) {
+        saveLogFromModal();
+      }
+    });
+
+    // ===== INIT =====
     ['flokzu', 'segur'].forEach(id => {
       checkWeekRollover(id);
       setInterval(() => updateDisplay(id), 1000);
@@ -403,6 +952,10 @@
         if (e.key === 'Enter') adjustTime(id, 1);
       });
     });
+
+    checkWeeklyConsolidation();
+    renderHistory();
+    updateAutoSaveUI();
   </script>
 </body>
 </html>
