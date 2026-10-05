@@ -436,6 +436,173 @@
       transition: background 0.2s;
     }
     .btn--modal-skip:hover { background: #e2e8f0; }
+
+    /* ===== Pausa corta ===== */
+    .break-bar {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 900px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      background: #fff;
+      border: 2px dashed #fcd34d;
+      border-radius: 20px;
+      padding: 14px 16px;
+    }
+
+    .break-bar__label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #92400e;
+    }
+
+    .btn--break { background: #f59e0b; color: #fff; }
+    .btn--break:hover { background: #d97706; }
+    .btn--break--active {
+      background: #b45309;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.35);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .break-bar__status {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #92400e;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn--break-end {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn--break-end:hover { background: #15803d; }
+
+    .card--flokzu .card__status--break { color: #d97706; }
+    .card--segur .card__status--break { color: #fbbf24; }
+
+    /* ===== Reuniones ===== */
+    .meetings {
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+
+    .meetings__title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .meetings__form {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .meetings__form input,
+    .meetings__form select {
+      padding: 9px 10px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      background: #fff;
+      color: #1e293b;
+    }
+
+    .meetings__form input:focus,
+    .meetings__form select:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .meetings__form input[type="text"] { min-width: 200px; }
+
+    .meetings__quota {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 16px 0 14px;
+    }
+
+    .quota-chip {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .quota-chip--over {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    .meeting-item {
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      border-left: 4px solid;
+    }
+    .meeting-item--flokzu { background: #fdf2f8; border-left-color: #ec4899; }
+    .meeting-item--segur { background: #eff6ff; border-left-color: #38bdf8; }
+
+    .meeting-item__meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .meeting-item__desc {
+      font-size: 0.9rem;
+      color: #1e293b;
+      word-break: break-word;
+    }
+
+    .btn--delete {
+      margin-left: auto;
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      border-radius: 8px;
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn--delete:hover { background: #fecaca; }
   </style>
 </head>
 <body>
@@ -485,6 +652,30 @@
     </div>
   </div>
 
+  <div class="break-bar">
+    <span class="break-bar__label">⏸ Pausa corta</span>
+    <button class="btn btn--break" id="break-btn-comida" onclick="toggleBreak('comida')">🍽️ Comida</button>
+    <button class="btn btn--break" id="break-btn-bano" onclick="toggleBreak('bano')">🚿 Baño</button>
+    <span class="break-bar__status" id="breakStatus" style="display:none;"></span>
+  </div>
+
+  <div class="meetings">
+    <div class="meetings__title">Reuniones / horas extra</div>
+    <form class="meetings__form" onsubmit="return addMeeting(event)">
+      <select id="mProyecto" aria-label="Proyecto">
+        <option value="flokzu">Flokzu</option>
+        <option value="segur">Seguridad</option>
+      </select>
+      <input type="date" id="mFecha" required aria-label="Fecha">
+      <input type="time" id="mInicio" required aria-label="Hora de inicio">
+      <input type="time" id="mFin" required aria-label="Hora de fin">
+      <input type="text" id="mDesc" placeholder="Descripción de la reunión" aria-label="Descripción">
+      <button type="submit" class="btn--export">➕ Guardar reunión</button>
+    </form>
+    <div class="meetings__quota" id="quotaStatus"></div>
+    <div id="meetingsList"></div>
+  </div>
+
   <div class="export-bar">
     <button class="btn--export" onclick="downloadDiario()">📥 Descargar diario</button>
     <button class="btn--export" onclick="downloadSemanal()">📥 Descargar semanal</button>
@@ -515,6 +706,23 @@
     const STORAGE_PREFIX = 'cronometro_';
     const TIMER_NAMES = { flokzu: 'Flokzu', segur: 'Seguridad de la Información' };
     const timers = {};
+    const QUOTAS = { flokzu: 12 * 3600, segur: 8 * 3600 };
+    const BREAK_NAMES = { comida: 'Comida', bano: 'Baño' };
+    let activeBreak = null;
+
+    function toDateKey(d) {
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function toSecs(hhmm) {
+      const p = hhmm.split(':');
+      return (parseInt(p[0], 10) || 0) * 3600 + (parseInt(p[1], 10) || 0) * 60;
+    }
+
+    function fmtH(seconds) {
+      return seconds > 0 ? formatShortLegible(seconds) : '0 hrs';
+    }
+
 
     function getState(id) {
       const raw = localStorage.getItem(STORAGE_PREFIX + id);
@@ -562,6 +770,10 @@
         statusEl.textContent = '● En ejecución';
         statusEl.className = 'card__status card__status--active';
         btnEl.innerHTML = '⏸ Pausar';
+      } else if (state.breakPaused && activeBreak) {
+        statusEl.textContent = '● En pausa (' + BREAK_NAMES[activeBreak.type] + ')';
+        statusEl.className = 'card__status card__status--break';
+        btnEl.innerHTML = '▶ Reanudar';
       } else {
         statusEl.textContent = 'Detenido';
         statusEl.className = 'card__status';
@@ -591,6 +803,7 @@
       } else {
         state.running = true;
         state.lastStart = Date.now();
+        state.breakPaused = false;
         saveState(id, state);
         updateDisplay(id);
       }
@@ -600,6 +813,7 @@
       if (!confirm('¿Reiniciar el cronómetro a 00:00:00?')) return;
       saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart() });
       updateDisplay(id);
+      updateQuotaDisplay();
     }
 
     function adjustTime(id, direction) {
@@ -628,6 +842,7 @@
 
       saveState(id, { elapsed, running: false, lastStart: null, weekStart: state.weekStart });
       updateDisplay(id);
+      updateQuotaDisplay();
       input.value = '';
 
       const absSeconds = Math.abs(hours * 3600 + minutes * 60);
@@ -642,6 +857,84 @@
       if (state.weekStart !== currentWeek) {
         saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: currentWeek });
       }
+    }
+
+    // ===== PAUSA CORTA =====
+    function getBreak() {
+      try { return JSON.parse(localStorage.getItem('cronometro_break') || 'null'); }
+      catch { return null; }
+    }
+
+    function setBreak(br) {
+      if (br) localStorage.setItem('cronometro_break', JSON.stringify(br));
+      else localStorage.removeItem('cronometro_break');
+    }
+
+    function startBreak(type) {
+      const br = { type: type, start: Date.now(), paused: [] };
+      activeBreak = br;
+      ['flokzu', 'segur'].forEach(id => {
+        const state = getState(id);
+        if (state.running) {
+          state.elapsed += Math.floor((Date.now() - state.lastStart) / 1000);
+          state.running = false;
+          state.lastStart = null;
+          state.breakPaused = true;
+          br.paused.push(id);
+          saveState(id, state);
+          updateDisplay(id);
+        }
+      });
+      setBreak(br);
+      updateBreakUI();
+    }
+
+    function endBreak() {
+      if (!activeBreak) return;
+      const paused = activeBreak.paused || [];
+      activeBreak = null;
+      setBreak(null);
+      paused.forEach(id => {
+        const state = getState(id);
+        if (state.breakPaused && !state.running) {
+          state.running = true;
+          state.lastStart = Date.now();
+        }
+        state.breakPaused = false;
+        saveState(id, state);
+        updateDisplay(id);
+      });
+      updateBreakUI();
+    }
+
+    function toggleBreak(type) {
+      if (activeBreak) endBreak();
+      else startBreak(type);
+    }
+
+    function updateBreakUI() {
+      const statusEl = document.getElementById('breakStatus');
+      const btnComida = document.getElementById('break-btn-comida');
+      const btnBano = document.getElementById('break-btn-bano');
+      if (activeBreak) {
+        statusEl.style.display = '';
+        statusEl.innerHTML = 'En pausa: ' + BREAK_NAMES[activeBreak.type] + ' · <span id="breakElapsed">00:00:00</span> ' +
+          '<button type="button" class="btn--break-end" onclick="endBreak()">▶ Terminar pausa</button>';
+        btnComida.classList.toggle('btn--break--active', activeBreak.type === 'comida');
+        btnBano.classList.toggle('btn--break--active', activeBreak.type === 'bano');
+        updateBreakTick();
+      } else {
+        statusEl.style.display = 'none';
+        statusEl.innerHTML = '';
+        btnComida.classList.remove('btn--break--active');
+        btnBano.classList.remove('btn--break--active');
+      }
+    }
+
+    function updateBreakTick() {
+      if (!activeBreak) return;
+      const el = document.getElementById('breakElapsed');
+      if (el) el.textContent = formatTime(Math.floor((Date.now() - activeBreak.start) / 1000));
     }
 
     // ===== LOGGING =====
@@ -717,6 +1010,155 @@
       }
     }
 
+    // ===== REUNIONES =====
+    function getMeetings() {
+      try { return JSON.parse(localStorage.getItem('cronometro_meetings') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveMeetings(list) {
+      localStorage.setItem('cronometro_meetings', JSON.stringify(list));
+    }
+
+    function addMeeting(e) {
+      e.preventDefault();
+      const proyecto = document.getElementById('mProyecto').value;
+      const fecha = document.getElementById('mFecha').value;
+      const inicio = document.getElementById('mInicio').value;
+      const fin = document.getElementById('mFin').value;
+      const desc = document.getElementById('mDesc').value.trim();
+
+      if (!fecha || !inicio || !fin) {
+        alert('Completa la fecha, hora de inicio y hora de fin.');
+        return false;
+      }
+      if (toSecs(fin) <= toSecs(inicio)) {
+        alert('La hora de fin debe ser posterior a la hora de inicio.');
+        return false;
+      }
+
+      const parts = fecha.split('-').map(Number);
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      const duracion = toSecs(fin) - toSecs(inicio);
+      const meeting = {
+        id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        proyecto: proyecto,
+        fecha: fecha,
+        inicio: inicio,
+        fin: fin,
+        duracion_seg: duracion,
+        descripcion: desc || '(sin descripción)',
+        weekStart: getWeekStart(d),
+        timestamp: new Date(parts[0], parts[1] - 1, parts[2], parseInt(inicio.split(':')[0], 10), parseInt(inicio.split(':')[1], 10)).getTime()
+      };
+
+      const meetings = getMeetings();
+      meetings.push(meeting);
+      saveMeetings(meetings);
+
+      document.getElementById('mInicio').value = '';
+      document.getElementById('mFin').value = '';
+      document.getElementById('mDesc').value = '';
+      renderMeetings();
+      return false;
+    }
+
+    function deleteMeeting(id) {
+      const meetings = getMeetings();
+      const m = meetings.find(x => x.id === id);
+      if (!m) return;
+      if (!confirm('¿Quitar la reunión del ' + m.fecha + ' (' + m.inicio + '–' + m.fin + ')?')) return;
+      saveMeetings(meetings.filter(x => x.id !== id));
+      renderMeetings();
+    }
+
+    function renderMeetings() {
+      const meetings = getMeetings();
+      const container = document.getElementById('meetingsList');
+      if (meetings.length === 0) {
+        container.innerHTML = '<p class="history__empty">Sin reuniones registradas.</p>';
+        updateQuotaDisplay();
+        return;
+      }
+      const sorted = meetings.slice().sort((a, b) => b.timestamp - a.timestamp);
+      container.innerHTML = sorted.map(m => {
+        const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
+        return '<div class="meeting-item meeting-item--' + m.proyecto + '">' +
+          '<div class="meeting-item__meta">' +
+            '<span>' + escapeHtml(m.fecha) + '</span>' +
+            '<span>' + escapeHtml(m.inicio) + '–' + escapeHtml(m.fin) + '</span>' +
+            '<span>' + name + '</span>' +
+            '<span>' + formatShortLegible(m.duracion_seg) + '</span>' +
+            '<button class="btn--delete" onclick="deleteMeeting(\'' + m.id + '\')">🗑 Quitar</button>' +
+          '</div>' +
+          '<div class="meeting-item__desc">' + escapeHtml(m.descripcion) + '</div>' +
+        '</div>';
+      }).join('');
+      updateQuotaDisplay();
+    }
+
+    // ===== DATOS SEMANALES / TOPES / ARRASTRE =====
+    function getWeekData(weekStart) {
+      const end = weekStart + 7 * 86400000;
+      const logs = getLogs().filter(l => l.timestamp >= weekStart && l.timestamp < end);
+      const meetings = getMeetings().filter(m => m.weekStart === weekStart);
+      const timer = { flokzu: 0, segur: 0 };
+      const meetingsTotal = { flokzu: 0, segur: 0 };
+      logs.forEach(l => { if (l.id === 'flokzu') timer.flokzu += l.duracion_seg; else timer.segur += l.duracion_seg; });
+      meetings.forEach(m => { if (m.proyecto === 'flokzu') meetingsTotal.flokzu += m.duracion_seg; else meetingsTotal.segur += m.duracion_seg; });
+      ['flokzu', 'segur'].forEach(id => {
+        const state = getState(id);
+        if (state.weekStart === weekStart) timer[id] += getElapsed(state);
+      });
+      return { logs, meetings, timer, meetingsTotal };
+    }
+
+    function getAllDataWeeks() {
+      const set = new Set();
+      getLogs().forEach(l => set.add(getWeekStart(new Date(l.timestamp))));
+      getMeetings().forEach(m => set.add(m.weekStart));
+      return Array.from(set).sort((a, b) => a - b);
+    }
+
+    function computeCarryIn(targetWeek) {
+      const weeks = getAllDataWeeks();
+      if (weeks.length === 0 || weeks[0] >= targetWeek) return { flokzu: 0, segur: 0 };
+      let w = weeks[0];
+      let carry = { flokzu: 0, segur: 0 };
+      let guard = 0;
+      while (w < targetWeek && guard++ < 520) {
+        const d = getWeekData(w);
+        const tF = d.timer.flokzu + d.meetingsTotal.flokzu + carry.flokzu;
+        const tS = d.timer.segur + d.meetingsTotal.segur + carry.segur;
+        carry = {
+          flokzu: Math.max(0, tF - QUOTAS.flokzu),
+          segur: Math.max(0, tS - QUOTAS.segur)
+        };
+        w = getWeekStart(new Date(w + 7 * 86400000 + 43200000));
+      }
+      return carry;
+    }
+
+    function updateQuotaDisplay() {
+      const el = document.getElementById('quotaStatus');
+      if (!el) return;
+      const ws = getWeekStart();
+      const d = getWeekData(ws);
+      const carry = computeCarryIn(ws);
+      const num = getWeekNumber(new Date(ws));
+      let html = '';
+      ['flokzu', 'segur'].forEach(id => {
+        const total = d.timer[id] + d.meetingsTotal[id] + carry[id];
+        const excess = Math.max(0, total - QUOTAS[id]);
+        const name = id === 'flokzu' ? 'Flokzu' : 'Seguridad';
+        html += '<span class="quota-chip' + (excess > 0 ? ' quota-chip--over' : '') + '">' +
+          name + ': ' + fmtH(total) + ' / ' + fmtH(QUOTAS[id]) +
+          (excess > 0 ? ' · +' + fmtH(excess) + ' → Semana ' + (num + 1) : ' · dentro de la meta') +
+          '</span>';
+      });
+      el.innerHTML = html;
+    }
+
     // ===== HISTORY =====
     function renderHistory() {
       const logs = getLogs();
@@ -736,6 +1178,7 @@
           '<div class="history__desc">' + escapeHtml(log.descripcion) + '</div>' +
         '</div>';
       }).join('');
+      updateQuotaDisplay();
     }
 
     function escapeHtml(text) {
@@ -783,26 +1226,28 @@
         await idbSet('dirHandle', dirHandle);
         localStorage.setItem('cronometro_autosave', 'true');
         updateAutoSaveUI();
+        checkWeeklyConsolidation();
       } catch (e) { /* User cancelled */ }
     }
 
     async function tryAppendToFile(filename, content) {
-      if (!window.showDirectoryPicker) return;
+      if (!window.showDirectoryPicker) return false;
       try {
         let dirHandle = await idbGet('dirHandle');
-        if (!dirHandle) return;
+        if (!dirHandle) return false;
         let perm = await dirHandle.queryPermission({ mode: 'readwrite' });
         if (perm !== 'granted') {
           perm = await dirHandle.requestPermission({ mode: 'readwrite' });
         }
-        if (perm !== 'granted') return;
+        if (perm !== 'granted') return false;
         const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
         const file = await fileHandle.getFile();
         const existing = await file.text();
         const writable = await fileHandle.createWritable({ keepExistingData: true });
         await writable.write(existing + content);
         await writable.close();
-      } catch (e) { /* Skip silently */ }
+        return true;
+      } catch (e) { return false; }
     }
 
     function updateAutoSaveUI() {
@@ -811,30 +1256,39 @@
       document.getElementById('autosaveStatus').style.display = active ? '' : 'none';
     }
 
-    // ===== WEEKLY CONSOLIDATION =====
-    function checkWeeklyConsolidation() {
-      const lastConsolidated = parseInt(localStorage.getItem('cronometro_consolidated') || '0');
-      const currentWeekStart = getWeekStart();
-      if (lastConsolidated >= currentWeekStart) return;
+    // ===== WEEKLY CONSOLIDATION (solo append, nunca sobrescribe) =====
+    function getWrittenWeeks() {
+      try { return JSON.parse(localStorage.getItem('cronometro_written_weeks') || '[]'); }
+      catch { return []; }
+    }
 
-      const logs = getLogs();
-      const toConsolidate = logs.filter(l => l.timestamp >= lastConsolidated && l.timestamp < currentWeekStart);
+    async function checkWeeklyConsolidation() {
+      let written = getWrittenWeeks();
 
-      if (toConsolidate.length > 0) {
-        const weeks = {};
-        toConsolidate.forEach(log => {
-          const ws = getWeekStart(new Date(log.timestamp));
-          (weeks[ws] = weeks[ws] || []).push(log);
+      // Migración: el marcador antiguo indicaba todo lo ya escrito en semanal.txt
+      const oldMarker = localStorage.getItem('cronometro_consolidated');
+      if (oldMarker !== null) {
+        const marker = parseInt(oldMarker, 10) || 0;
+        getAllDataWeeks().forEach(ws => {
+          if (ws < marker && !written.includes(ws)) written.push(ws);
         });
-        Object.keys(weeks).forEach(ws => {
-          const summary = formatWeeklySummary(weeks[ws], parseInt(ws));
-          if (localStorage.getItem('cronometro_autosave') === 'true') {
-            tryAppendToFile('semanal.txt', summary);
-          }
-        });
+        localStorage.setItem('cronometro_written_weeks', JSON.stringify(written));
+        localStorage.removeItem('cronometro_consolidated');
       }
 
-      localStorage.setItem('cronometro_consolidated', String(currentWeekStart));
+      if (localStorage.getItem('cronometro_autosave') !== 'true') return;
+
+      const currentWeek = getWeekStart();
+      const pending = getAllDataWeeks()
+        .filter(ws => ws < currentWeek && !written.includes(ws))
+        .sort((a, b) => a - b);
+
+      for (const ws of pending) {
+        const ok = await tryAppendToFile('semanal.txt', formatWeeklySummary(ws));
+        if (!ok) break;
+        written.push(ws);
+        localStorage.setItem('cronometro_written_weeks', JSON.stringify(written));
+      }
     }
 
     // ===== FORMATTING FOR FILES =====
@@ -843,33 +1297,83 @@
       return '[' + log.fecha + '] ' + name + ' - ' + log.duracion_legible + '\n  → ' + log.descripcion + '\n\n';
     }
 
-    function formatWeeklySummary(logs, weekStart) {
+    function formatMeetingEntry(m) {
+      const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
+      return '[' + m.fecha + ' ' + m.inicio + '–' + m.fin + '] Reunión ' + name + ' - ' + formatShortLegible(m.duracion_seg) +
+        '\n  → ' + m.descripcion + '\n\n';
+    }
+
+    function formatWeeklySummary(weekStart) {
+      const d = getWeekData(weekStart);
+      const carryIn = computeCarryIn(weekStart);
       const ws = new Date(weekStart);
       const we = new Date(weekStart);
       we.setDate(we.getDate() + 6);
-      const opts = { day: '2-digit', month: '2-digit' };
+      const opts = { day: '2-digit', month: '2-digit', year: 'numeric' };
       const weekNum = getWeekNumber(ws);
+      const prevWeekStart = getWeekStart(new Date(weekStart - 86400000));
+      const nextWeekStart = getWeekStart(new Date(weekStart + 7 * 86400000 + 43200000));
+      const prevNum = getWeekNumber(new Date(prevWeekStart));
+      const nextNum = getWeekNumber(new Date(nextWeekStart));
 
-      let flokzuTotal = 0, segurTotal = 0;
-      logs.forEach(l => {
-        if (l.id === 'flokzu') flokzuTotal += l.duracion_seg;
-        else segurTotal += l.duracion_seg;
-      });
-      const total = flokzuTotal + segurTotal;
+      const total = {
+        flokzu: d.timer.flokzu + d.meetingsTotal.flokzu + carryIn.flokzu,
+        segur: d.timer.segur + d.meetingsTotal.segur + carryIn.segur
+      };
+      const excess = {
+        flokzu: Math.max(0, total.flokzu - QUOTAS.flokzu),
+        segur: Math.max(0, total.segur - QUOTAS.segur)
+      };
 
-      let txt = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-      txt += ' SEMANA ' + weekNum + ' (' + ws.toLocaleDateString('es', opts) + ' - ' + we.toLocaleDateString('es', opts) + '/' + we.getFullYear() + ')\n';
-      txt += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-      txt += ' [Flokzu]           ' + formatShortLegible(flokzuTotal) + '\n';
-      txt += ' [Seguridad]        ' + formatShortLegible(segurTotal) + '\n';
-      txt += ' ─────────────────────────────────\n';
-      txt += ' TOTAL ' + formatShortLegible(total) + '\n\n';
-      txt += ' Detalles:\n';
-      logs.forEach(l => {
+      const line = '════════════════════════════════════\n';
+      let txt = line;
+      txt += ' SEMANA ' + weekNum + ' — ' + ws.toLocaleDateString('es', opts) + ' al ' + we.toLocaleDateString('es', opts) + '\n';
+      txt += line + '\n\n';
+
+      txt += ' [CRONÓMETROS]\n';
+      txt += '   Flokzu:    ' + fmtH(d.timer.flokzu) + '\n';
+      txt += '   Seguridad: ' + fmtH(d.timer.segur) + '\n\n';
+
+      txt += ' [REUNIONES]\n';
+      if (d.meetings.length === 0) {
+        txt += '   Sin reuniones registradas.\n';
+      } else {
+        d.meetings.forEach(m => {
+          const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
+          txt += '   • ' + m.fecha + ' ' + m.inicio + '–' + m.fin + ' [' + name + '] ' +
+            formatShortLegible(m.duracion_seg) + ' — ' + m.descripcion + '\n';
+        });
+      }
+      txt += '\n';
+
+      txt += ' [ARRASTRE]\n';
+      let hasCarry = false;
+      if (carryIn.flokzu > 0) { txt += '   ↑ Entrante: Flokzu ' + fmtH(carryIn.flokzu) + ' (Semana ' + prevNum + ')\n'; hasCarry = true; }
+      if (carryIn.segur > 0) { txt += '   ↑ Entrante: Seguridad ' + fmtH(carryIn.segur) + ' (Semana ' + prevNum + ')\n'; hasCarry = true; }
+      if (excess.flokzu > 0) { txt += '   ↓ Saliente: Flokzu ' + fmtH(excess.flokzu) + ' → Semana ' + nextNum + '\n'; hasCarry = true; }
+      if (excess.segur > 0) { txt += '   ↓ Saliente: Seguridad ' + fmtH(excess.segur) + ' → Semana ' + nextNum + '\n'; hasCarry = true; }
+      if (!hasCarry) txt += '   Sin arrastre.\n';
+      txt += '\n';
+
+      txt += ' [TOTALES VS META]\n';
+      txt += '   Flokzu:    ' + fmtH(total.flokzu) + ' / meta ' + fmtH(QUOTAS.flokzu) +
+        (excess.flokzu > 0 ? ' — excedente ' + fmtH(excess.flokzu) + ' → Semana ' + nextNum : ' — dentro de la meta') + '\n';
+      txt += '   Seguridad: ' + fmtH(total.segur) + ' / meta ' + fmtH(QUOTAS.segur) +
+        (excess.segur > 0 ? ' — excedente ' + fmtH(excess.segur) + ' → Semana ' + nextNum : ' — dentro de la meta') + '\n';
+      txt += '   Total:     ' + fmtH(total.flokzu + total.segur) + '\n\n';
+
+      txt += ' [DETALLES]\n';
+      if (d.logs.length === 0 && d.meetings.length === 0) txt += '   Sin registros.\n';
+      d.logs.forEach(l => {
         const name = l.id === 'flokzu' ? 'Flokzu' : 'Seguridad';
-        txt += ' • ' + l.fecha + ' - ' + name + ' - ' + l.duracion_legible + ': ' + l.descripcion + '\n';
+        txt += '   • ' + l.fecha + ' - ' + name + ' - ' + l.duracion_legible + ': ' + l.descripcion + '\n';
       });
-      txt += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+      d.meetings.forEach(m => {
+        const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
+        txt += '   • ' + m.fecha + ' ' + m.inicio + '–' + m.fin + ' - Reunión ' + name + ' - ' +
+          formatShortLegible(m.duracion_seg) + ': ' + m.descripcion + '\n';
+      });
+      txt += '\n' + line + '\n\n';
       return txt;
     }
 
@@ -895,9 +1399,11 @@
     function downloadDiario() {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+      const dateKey = toDateKey(new Date());
       const logs = getLogs().filter(l => l.timestamp >= today.getTime());
+      const meetings = getMeetings().filter(m => m.fecha === dateKey);
 
-      if (logs.length === 0) {
+      if (logs.length === 0 && meetings.length === 0) {
         alert('No hay registros para hoy.');
         return;
       }
@@ -907,32 +1413,47 @@
       txt += ' REGISTRO DIARIO - ' + dateStr + '\n';
       txt += '========================================\n\n';
 
-      let flokzuTotal = 0, segurTotal = 0;
+      let flokzuTimer = 0, segurTimer = 0, flokzuMeet = 0, segurMeet = 0;
       logs.forEach(l => {
         txt += formatDiarioEntry(l);
-        if (l.id === 'flokzu') flokzuTotal += l.duracion_seg;
-        else segurTotal += l.duracion_seg;
+        if (l.id === 'flokzu') flokzuTimer += l.duracion_seg;
+        else segurTimer += l.duracion_seg;
+      });
+      meetings.forEach(m => {
+        txt += formatMeetingEntry(m);
+        if (m.proyecto === 'flokzu') flokzuMeet += m.duracion_seg;
+        else segurMeet += m.duracion_seg;
       });
 
       txt += '----------------------------------------\n';
-      txt += ' Flokzu:    ' + formatShortLegible(flokzuTotal) + '\n';
-      txt += ' Seguridad: ' + formatShortLegible(segurTotal) + '\n';
-      txt += ' Total:     ' + formatShortLegible(flokzuTotal + segurTotal) + '\n';
+      txt += ' Cronómetros:\n';
+      txt += '   Flokzu:    ' + fmtH(flokzuTimer) + '\n';
+      txt += '   Seguridad: ' + fmtH(segurTimer) + '\n';
+      txt += ' Reuniones:\n';
+      txt += '   Flokzu:    ' + fmtH(flokzuMeet) + '\n';
+      txt += '   Seguridad: ' + fmtH(segurMeet) + '\n';
+      txt += ' Total: ' + fmtH(flokzuTimer + segurTimer + flokzuMeet + segurMeet) + '\n';
 
       downloadFile('diario.txt', txt);
     }
 
     function downloadSemanal() {
       const weekStart = getWeekStart();
-      const logs = getLogs().filter(l => l.timestamp >= weekStart);
-
-      if (logs.length === 0) {
+      const d = getWeekData(weekStart);
+      if (d.logs.length === 0 && d.meetings.length === 0) {
         alert('No hay registros esta semana.');
         return;
       }
 
-      const txt = formatWeeklySummary(logs, weekStart);
-      downloadFile('semanal.txt', txt);
+      const ws = new Date(weekStart);
+      const we = new Date(weekStart);
+      we.setDate(we.getDate() + 6);
+      const weekNum = getWeekNumber(ws);
+      const p = x => String(x).padStart(2, '0');
+      const fmtDate = dt => p(dt.getDate()) + '-' + p(dt.getMonth() + 1);
+      const filename = 'semanal-S' + weekNum + '-' + ws.getFullYear() + '_' + fmtDate(ws) + '_' + fmtDate(we) + '.txt';
+
+      downloadFile(filename, formatWeeklySummary(weekStart));
     }
 
     // ===== KEYBOARD SHORTCUTS =====
@@ -944,18 +1465,23 @@
     });
 
     // ===== INIT =====
+    activeBreak = getBreak();
+
     ['flokzu', 'segur'].forEach(id => {
       checkWeekRollover(id);
-      setInterval(() => updateDisplay(id), 1000);
+      setInterval(() => { updateDisplay(id); updateBreakTick(); }, 1000);
       updateDisplay(id);
       document.getElementById('adjust-' + id).addEventListener('keydown', e => {
         if (e.key === 'Enter') adjustTime(id, 1);
       });
     });
 
-    checkWeeklyConsolidation();
+    document.getElementById('mFecha').value = toDateKey(new Date());
+    updateBreakUI();
+    renderMeetings();
     renderHistory();
     updateAutoSaveUI();
+    checkWeeklyConsolidation();
   </script>
 </body>
 </html>
