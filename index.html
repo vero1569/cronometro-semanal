@@ -452,14 +452,6 @@
       padding: 14px 16px;
     }
 
-    .break-bar__label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #92400e;
-    }
-
     .btn--break { background: #f59e0b; color: #fff; }
     .btn--break:hover { background: #d97706; }
     .btn--break--active {
@@ -493,107 +485,10 @@
     .card--flokzu .card__status--break { color: #d97706; }
     .card--segur .card__status--break { color: #fbbf24; }
 
-    /* ===== Reuniones ===== */
-    .meetings {
-      width: 100%;
-      max-width: 900px;
-      background: #fff;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-    }
-
-    .meetings__title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #1e293b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .meetings__form {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .meetings__form input,
-    .meetings__form select {
-      padding: 9px 10px;
-      border: 2px solid #e2e8f0;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-family: inherit;
-      background: #fff;
-      color: #1e293b;
-    }
-
-    .meetings__form input:focus,
-    .meetings__form select:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
-
-    .meetings__form input[type="text"] { min-width: 200px; }
-
-    .meetings__quota {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 16px 0 14px;
-    }
-
-    .quota-chip {
-      background: #f1f5f9;
-      color: #334155;
-      border: 1px solid #e2e8f0;
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 0.82rem;
-      font-weight: 600;
-    }
-
-    .quota-chip--over {
-      background: #fef2f2;
-      color: #b91c1c;
-      border-color: #fecaca;
-    }
-
-    .meeting-item {
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-bottom: 8px;
-      border-left: 4px solid;
-    }
-    .meeting-item--flokzu { background: #fdf2f8; border-left-color: #ec4899; }
-    .meeting-item--segur { background: #eff6ff; border-left-color: #38bdf8; }
-
-    .meeting-item__meta {
-      display: flex;
-      gap: 12px;
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-bottom: 4px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .meeting-item__desc {
-      font-size: 0.9rem;
-      color: #1e293b;
-      word-break: break-word;
-    }
-
-    .btn--delete {
+    .btn--edit {
       margin-left: auto;
-      background: #fee2e2;
-      color: #dc2626;
+      background: #eef2ff;
+      color: #4f46e5;
       border: none;
       border-radius: 8px;
       padding: 3px 10px;
@@ -602,7 +497,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .btn--delete:hover { background: #fecaca; }
+    .btn--edit:hover { background: #e0e7ff; }
   </style>
 </head>
 <body>
@@ -653,31 +548,11 @@
   </div>
 
   <div class="break-bar">
-    <span class="break-bar__label">⏸ Pausa corta</span>
-    <button class="btn btn--break" id="break-btn-comida" onclick="toggleBreak('comida')">🍽️ Comida</button>
-    <button class="btn btn--break" id="break-btn-bano" onclick="toggleBreak('bano')">🚿 Baño</button>
+    <button class="btn btn--break" id="break-btn" onclick="toggleBreak()">⏸ Pausa corta</button>
     <span class="break-bar__status" id="breakStatus" style="display:none;"></span>
   </div>
 
-  <div class="meetings">
-    <div class="meetings__title">Reuniones / horas extra</div>
-    <form class="meetings__form" onsubmit="return addMeeting(event)">
-      <select id="mProyecto" aria-label="Proyecto">
-        <option value="flokzu">Flokzu</option>
-        <option value="segur">Seguridad</option>
-      </select>
-      <input type="date" id="mFecha" required aria-label="Fecha">
-      <input type="time" id="mInicio" required aria-label="Hora de inicio">
-      <input type="time" id="mFin" required aria-label="Hora de fin">
-      <input type="text" id="mDesc" placeholder="Descripción de la reunión" aria-label="Descripción">
-      <button type="submit" class="btn--export">➕ Guardar reunión</button>
-    </form>
-    <div class="meetings__quota" id="quotaStatus"></div>
-    <div id="meetingsList"></div>
-  </div>
-
   <div class="export-bar">
-    <button class="btn--export" onclick="downloadDiario()">📥 Descargar diario</button>
     <button class="btn--export" onclick="downloadSemanal()">📥 Descargar semanal</button>
     <button class="btn--autosave" id="autosaveBtn" onclick="setupAutoSave()">📁 Auto-guardado</button>
     <span class="autosave-status" id="autosaveStatus" style="display:none;">✅ Guardado automático activo</span>
@@ -702,22 +577,23 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <span class="modal__badge" id="editBadge">Flokzu</span>
+      <div class="modal__duration" id="editDuration">0m</div>
+      <textarea class="modal__textarea" id="editTextarea" placeholder="Descripción del registro" rows="3"></textarea>
+      <div class="modal__actions">
+        <button class="btn--modal-skip" onclick="closeEditModal()">Cancelar</button>
+        <button class="btn--modal-save" onclick="saveEditFromModal()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const STORAGE_PREFIX = 'cronometro_';
     const TIMER_NAMES = { flokzu: 'Flokzu', segur: 'Seguridad de la Información' };
     const timers = {};
-    const QUOTAS = { flokzu: 12 * 3600, segur: 8 * 3600 };
-    const BREAK_NAMES = { comida: 'Comida', bano: 'Baño' };
     let activeBreak = null;
-
-    function toDateKey(d) {
-      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-    }
-
-    function toSecs(hhmm) {
-      const p = hhmm.split(':');
-      return (parseInt(p[0], 10) || 0) * 3600 + (parseInt(p[1], 10) || 0) * 60;
-    }
 
     function fmtH(seconds) {
       return seconds > 0 ? formatShortLegible(seconds) : '0 hrs';
@@ -726,8 +602,12 @@
 
     function getState(id) {
       const raw = localStorage.getItem(STORAGE_PREFIX + id);
-      if (raw) return JSON.parse(raw);
-      return { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart() };
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (typeof s.anchor !== 'number') s.anchor = s.elapsed || 0;
+        return s;
+      }
+      return { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart(), anchor: 0 };
     }
 
     function saveState(id, state) {
@@ -771,7 +651,7 @@
         statusEl.className = 'card__status card__status--active';
         btnEl.innerHTML = '⏸ Pausar';
       } else if (state.breakPaused && activeBreak) {
-        statusEl.textContent = '● En pausa (' + BREAK_NAMES[activeBreak.type] + ')';
+        statusEl.textContent = '● En pausa';
         statusEl.className = 'card__status card__status--break';
         btnEl.innerHTML = '▶ Reanudar';
       } else {
@@ -791,8 +671,11 @@
     function toggleTimer(id) {
       const state = getState(id);
       if (state.running) {
-        const sessionSeconds = Math.floor((Date.now() - state.lastStart) / 1000);
-        state.elapsed += sessionSeconds;
+        const totalNow = getElapsed(state);
+        let sessionSeconds = totalNow - (state.anchor || 0);
+        if (sessionSeconds < 0) sessionSeconds = 0;
+        state.elapsed = totalNow;
+        state.anchor = totalNow;
         state.running = false;
         state.lastStart = null;
         saveState(id, state);
@@ -811,9 +694,8 @@
 
     function resetTimer(id) {
       if (!confirm('¿Reiniciar el cronómetro a 00:00:00?')) return;
-      saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart() });
+      saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: getWeekStart(), anchor: 0 });
       updateDisplay(id);
-      updateQuotaDisplay();
     }
 
     function adjustTime(id, direction) {
@@ -839,10 +721,12 @@
       const state = getState(id);
       let elapsed = getElapsed(state) + totalSeconds;
       if (elapsed < 0) elapsed = 0;
+      let anchor = (typeof state.anchor === 'number' ? state.anchor : state.elapsed || 0) + totalSeconds;
+      if (anchor < 0) anchor = 0;
+      if (anchor > elapsed) anchor = elapsed;
 
-      saveState(id, { elapsed, running: false, lastStart: null, weekStart: state.weekStart });
+      saveState(id, { elapsed, running: false, lastStart: null, weekStart: state.weekStart, anchor });
       updateDisplay(id);
-      updateQuotaDisplay();
       input.value = '';
 
       const absSeconds = Math.abs(hours * 3600 + minutes * 60);
@@ -855,7 +739,7 @@
       const state = getState(id);
       const currentWeek = getWeekStart();
       if (state.weekStart !== currentWeek) {
-        saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: currentWeek });
+        saveState(id, { elapsed: 0, running: false, lastStart: null, weekStart: currentWeek, anchor: 0 });
       }
     }
 
@@ -870,8 +754,8 @@
       else localStorage.removeItem('cronometro_break');
     }
 
-    function startBreak(type) {
-      const br = { type: type, start: Date.now(), paused: [] };
+    function startBreak() {
+      const br = { start: Date.now(), paused: [] };
       activeBreak = br;
       ['flokzu', 'segur'].forEach(id => {
         const state = getState(id);
@@ -889,14 +773,15 @@
       updateBreakUI();
     }
 
-    function endBreak() {
+    function endBreak(shouldResume) {
       if (!activeBreak) return;
+      const resume = shouldResume !== false;
       const paused = activeBreak.paused || [];
       activeBreak = null;
       setBreak(null);
       paused.forEach(id => {
         const state = getState(id);
-        if (state.breakPaused && !state.running) {
+        if (state.breakPaused && !state.running && resume) {
           state.running = true;
           state.lastStart = Date.now();
         }
@@ -907,27 +792,26 @@
       updateBreakUI();
     }
 
-    function toggleBreak(type) {
+    function toggleBreak() {
       if (activeBreak) endBreak();
-      else startBreak(type);
+      else startBreak();
     }
 
     function updateBreakUI() {
       const statusEl = document.getElementById('breakStatus');
-      const btnComida = document.getElementById('break-btn-comida');
-      const btnBano = document.getElementById('break-btn-bano');
+      const btn = document.getElementById('break-btn');
       if (activeBreak) {
         statusEl.style.display = '';
-        statusEl.innerHTML = 'En pausa: ' + BREAK_NAMES[activeBreak.type] + ' · <span id="breakElapsed">00:00:00</span> ' +
+        statusEl.innerHTML = 'En pausa · <span id="breakElapsed">00:00:00</span> ' +
           '<button type="button" class="btn--break-end" onclick="endBreak()">▶ Terminar pausa</button>';
-        btnComida.classList.toggle('btn--break--active', activeBreak.type === 'comida');
-        btnBano.classList.toggle('btn--break--active', activeBreak.type === 'bano');
+        btn.classList.add('btn--break--active');
+        btn.innerHTML = '⏸ En pausa...';
         updateBreakTick();
       } else {
         statusEl.style.display = 'none';
         statusEl.innerHTML = '';
-        btnComida.classList.remove('btn--break--active');
-        btnBano.classList.remove('btn--break--active');
+        btn.classList.remove('btn--break--active');
+        btn.innerHTML = '⏸ Pausa corta';
       }
     }
 
@@ -1004,159 +888,61 @@
 
       renderHistory();
       closeLogModal();
-
-      if (localStorage.getItem('cronometro_autosave') === 'true') {
-        tryAppendToFile('diario.txt', formatDiarioEntry(log));
-      }
     }
 
-    // ===== REUNIONES =====
-    function getMeetings() {
-      try { return JSON.parse(localStorage.getItem('cronometro_meetings') || '[]'); }
-      catch { return []; }
+    // ===== EDITAR REGISTROS =====
+    let pendingEditIndex = null;
+
+    function openEditModal(index) {
+      const log = getLogs()[index];
+      if (!log) return;
+      pendingEditIndex = index;
+      const badge = document.getElementById('editBadge');
+      badge.textContent = TIMER_NAMES[log.id] || log.id;
+      badge.className = 'modal__badge modal__badge--' + log.id;
+      document.getElementById('editDuration').textContent = log.duracion_legible;
+      document.getElementById('editTextarea').value = log.descripcion === '(sin descripción)' ? '' : log.descripcion;
+      document.getElementById('editModal').classList.add('active');
+      setTimeout(() => document.getElementById('editTextarea').focus(), 100);
     }
 
-    function saveMeetings(list) {
-      localStorage.setItem('cronometro_meetings', JSON.stringify(list));
+    function closeEditModal() {
+      document.getElementById('editModal').classList.remove('active');
+      pendingEditIndex = null;
     }
 
-    function addMeeting(e) {
-      e.preventDefault();
-      const proyecto = document.getElementById('mProyecto').value;
-      const fecha = document.getElementById('mFecha').value;
-      const inicio = document.getElementById('mInicio').value;
-      const fin = document.getElementById('mFin').value;
-      const desc = document.getElementById('mDesc').value.trim();
-
-      if (!fecha || !inicio || !fin) {
-        alert('Completa la fecha, hora de inicio y hora de fin.');
-        return false;
-      }
-      if (toSecs(fin) <= toSecs(inicio)) {
-        alert('La hora de fin debe ser posterior a la hora de inicio.');
-        return false;
-      }
-
-      const parts = fecha.split('-').map(Number);
-      const d = new Date(parts[0], parts[1] - 1, parts[2]);
-      const duracion = toSecs(fin) - toSecs(inicio);
-      const meeting = {
-        id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-        proyecto: proyecto,
-        fecha: fecha,
-        inicio: inicio,
-        fin: fin,
-        duracion_seg: duracion,
-        descripcion: desc || '(sin descripción)',
-        weekStart: getWeekStart(d),
-        timestamp: new Date(parts[0], parts[1] - 1, parts[2], parseInt(inicio.split(':')[0], 10), parseInt(inicio.split(':')[1], 10)).getTime()
-      };
-
-      const meetings = getMeetings();
-      meetings.push(meeting);
-      saveMeetings(meetings);
-
-      document.getElementById('mInicio').value = '';
-      document.getElementById('mFin').value = '';
-      document.getElementById('mDesc').value = '';
-      renderMeetings();
-      return false;
+    function saveEditFromModal() {
+      if (pendingEditIndex === null) return;
+      const logs = getLogs();
+      const log = logs[pendingEditIndex];
+      if (!log) { closeEditModal(); return; }
+      const desc = document.getElementById('editTextarea').value.trim();
+      log.descripcion = desc || '(sin descripción)';
+      localStorage.setItem('cronometro_logs', JSON.stringify(logs));
+      renderHistory();
+      closeEditModal();
     }
 
-    function deleteMeeting(id) {
-      const meetings = getMeetings();
-      const m = meetings.find(x => x.id === id);
-      if (!m) return;
-      if (!confirm('¿Quitar la reunión del ' + m.fecha + ' (' + m.inicio + '–' + m.fin + ')?')) return;
-      saveMeetings(meetings.filter(x => x.id !== id));
-      renderMeetings();
-    }
-
-    function renderMeetings() {
-      const meetings = getMeetings();
-      const container = document.getElementById('meetingsList');
-      if (meetings.length === 0) {
-        container.innerHTML = '<p class="history__empty">Sin reuniones registradas.</p>';
-        updateQuotaDisplay();
-        return;
-      }
-      const sorted = meetings.slice().sort((a, b) => b.timestamp - a.timestamp);
-      container.innerHTML = sorted.map(m => {
-        const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
-        return '<div class="meeting-item meeting-item--' + m.proyecto + '">' +
-          '<div class="meeting-item__meta">' +
-            '<span>' + escapeHtml(m.fecha) + '</span>' +
-            '<span>' + escapeHtml(m.inicio) + '–' + escapeHtml(m.fin) + '</span>' +
-            '<span>' + name + '</span>' +
-            '<span>' + formatShortLegible(m.duracion_seg) + '</span>' +
-            '<button class="btn--delete" onclick="deleteMeeting(\'' + m.id + '\')">🗑 Quitar</button>' +
-          '</div>' +
-          '<div class="meeting-item__desc">' + escapeHtml(m.descripcion) + '</div>' +
-        '</div>';
-      }).join('');
-      updateQuotaDisplay();
-    }
-
-    // ===== DATOS SEMANALES / TOPES / ARRASTRE =====
+    // ===== DATOS SEMANALES =====
     function getWeekData(weekStart) {
       const end = weekStart + 7 * 86400000;
       const logs = getLogs().filter(l => l.timestamp >= weekStart && l.timestamp < end);
-      const meetings = getMeetings().filter(m => m.weekStart === weekStart);
       const timer = { flokzu: 0, segur: 0 };
-      const meetingsTotal = { flokzu: 0, segur: 0 };
-      logs.forEach(l => { if (l.id === 'flokzu') timer.flokzu += l.duracion_seg; else timer.segur += l.duracion_seg; });
-      meetings.forEach(m => { if (m.proyecto === 'flokzu') meetingsTotal.flokzu += m.duracion_seg; else meetingsTotal.segur += m.duracion_seg; });
       ['flokzu', 'segur'].forEach(id => {
         const state = getState(id);
-        if (state.weekStart === weekStart) timer[id] += getElapsed(state);
+        if (state.weekStart === weekStart) {
+          timer[id] = getElapsed(state);
+        } else {
+          timer[id] = logs.filter(l => l.id === id).reduce((sum, l) => sum + l.duracion_seg, 0);
+        }
       });
-      return { logs, meetings, timer, meetingsTotal };
+      return { logs, timer };
     }
 
     function getAllDataWeeks() {
       const set = new Set();
       getLogs().forEach(l => set.add(getWeekStart(new Date(l.timestamp))));
-      getMeetings().forEach(m => set.add(m.weekStart));
       return Array.from(set).sort((a, b) => a - b);
-    }
-
-    function computeCarryIn(targetWeek) {
-      const weeks = getAllDataWeeks();
-      if (weeks.length === 0 || weeks[0] >= targetWeek) return { flokzu: 0, segur: 0 };
-      let w = weeks[0];
-      let carry = { flokzu: 0, segur: 0 };
-      let guard = 0;
-      while (w < targetWeek && guard++ < 520) {
-        const d = getWeekData(w);
-        const tF = d.timer.flokzu + d.meetingsTotal.flokzu + carry.flokzu;
-        const tS = d.timer.segur + d.meetingsTotal.segur + carry.segur;
-        carry = {
-          flokzu: Math.max(0, tF - QUOTAS.flokzu),
-          segur: Math.max(0, tS - QUOTAS.segur)
-        };
-        w = getWeekStart(new Date(w + 7 * 86400000 + 43200000));
-      }
-      return carry;
-    }
-
-    function updateQuotaDisplay() {
-      const el = document.getElementById('quotaStatus');
-      if (!el) return;
-      const ws = getWeekStart();
-      const d = getWeekData(ws);
-      const carry = computeCarryIn(ws);
-      const num = getWeekNumber(new Date(ws));
-      let html = '';
-      ['flokzu', 'segur'].forEach(id => {
-        const total = d.timer[id] + d.meetingsTotal[id] + carry[id];
-        const excess = Math.max(0, total - QUOTAS[id]);
-        const name = id === 'flokzu' ? 'Flokzu' : 'Seguridad';
-        html += '<span class="quota-chip' + (excess > 0 ? ' quota-chip--over' : '') + '">' +
-          name + ': ' + fmtH(total) + ' / ' + fmtH(QUOTAS[id]) +
-          (excess > 0 ? ' · +' + fmtH(excess) + ' → Semana ' + (num + 1) : ' · dentro de la meta') +
-          '</span>';
-      });
-      el.innerHTML = html;
     }
 
     // ===== HISTORY =====
@@ -1167,18 +953,19 @@
         container.innerHTML = '<p class="history__empty">Sin registros todavía. Pausa un cronómetro para registrar.</p>';
         return;
       }
-      const recent = logs.slice(-15).reverse();
-      container.innerHTML = recent.map(log => {
+      const start = Math.max(0, logs.length - 15);
+      container.innerHTML = logs.slice(start).map((log, i) => {
+        const idx = start + i;
         return '<div class="history__item history__item--' + log.id + '">' +
           '<div class="history__meta">' +
             '<span>' + escapeHtml(log.fecha) + '</span>' +
             '<span>' + (log.id === 'flokzu' ? 'Flokzu' : 'Seguridad') + '</span>' +
             '<span>' + escapeHtml(log.duracion_legible) + '</span>' +
+            '<button class="btn--edit" onclick="openEditModal(' + idx + ')">✏️ Editar</button>' +
           '</div>' +
           '<div class="history__desc">' + escapeHtml(log.descripcion) + '</div>' +
         '</div>';
-      }).join('');
-      updateQuotaDisplay();
+      }).reverse().join('');
     }
 
     function escapeHtml(text) {
@@ -1292,86 +1079,35 @@
     }
 
     // ===== FORMATTING FOR FILES =====
-    function formatDiarioEntry(log) {
-      const name = log.id === 'flokzu' ? 'Flokzu' : 'Seguridad';
-      return '[' + log.fecha + '] ' + name + ' - ' + log.duracion_legible + '\n  → ' + log.descripcion + '\n\n';
+    function formatDayMonth(d) {
+      return d.getDate() + '-' + (d.getMonth() + 1);
     }
 
-    function formatMeetingEntry(m) {
-      const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
-      return '[' + m.fecha + ' ' + m.inicio + '–' + m.fin + '] Reunión ' + name + ' - ' + formatShortLegible(m.duracion_seg) +
-        '\n  → ' + m.descripcion + '\n\n';
+    function weeklyTitle(weekStart) {
+      const ws = new Date(weekStart);
+      const we = new Date(weekStart);
+      we.setDate(we.getDate() + 6);
+      return 'SEMANA ' + getWeekNumber(ws) + ' (' + formatDayMonth(ws) + ' al ' + formatDayMonth(we) + '-' + we.getFullYear() + ')';
     }
 
     function formatWeeklySummary(weekStart) {
       const d = getWeekData(weekStart);
-      const carryIn = computeCarryIn(weekStart);
-      const ws = new Date(weekStart);
-      const we = new Date(weekStart);
-      we.setDate(we.getDate() + 6);
-      const opts = { day: '2-digit', month: '2-digit', year: 'numeric' };
-      const weekNum = getWeekNumber(ws);
-      const prevWeekStart = getWeekStart(new Date(weekStart - 86400000));
-      const nextWeekStart = getWeekStart(new Date(weekStart + 7 * 86400000 + 43200000));
-      const prevNum = getWeekNumber(new Date(prevWeekStart));
-      const nextNum = getWeekNumber(new Date(nextWeekStart));
-
-      const total = {
-        flokzu: d.timer.flokzu + d.meetingsTotal.flokzu + carryIn.flokzu,
-        segur: d.timer.segur + d.meetingsTotal.segur + carryIn.segur
-      };
-      const excess = {
-        flokzu: Math.max(0, total.flokzu - QUOTAS.flokzu),
-        segur: Math.max(0, total.segur - QUOTAS.segur)
-      };
 
       const line = '════════════════════════════════════\n';
       let txt = line;
-      txt += ' SEMANA ' + weekNum + ' — ' + ws.toLocaleDateString('es', opts) + ' al ' + we.toLocaleDateString('es', opts) + '\n';
+      txt += ' ' + weeklyTitle(weekStart) + '\n';
       txt += line + '\n\n';
 
       txt += ' [CRONÓMETROS]\n';
       txt += '   Flokzu:    ' + fmtH(d.timer.flokzu) + '\n';
-      txt += '   Seguridad: ' + fmtH(d.timer.segur) + '\n\n';
-
-      txt += ' [REUNIONES]\n';
-      if (d.meetings.length === 0) {
-        txt += '   Sin reuniones registradas.\n';
-      } else {
-        d.meetings.forEach(m => {
-          const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
-          txt += '   • ' + m.fecha + ' ' + m.inicio + '–' + m.fin + ' [' + name + '] ' +
-            formatShortLegible(m.duracion_seg) + ' — ' + m.descripcion + '\n';
-        });
-      }
-      txt += '\n';
-
-      txt += ' [ARRASTRE]\n';
-      let hasCarry = false;
-      if (carryIn.flokzu > 0) { txt += '   ↑ Entrante: Flokzu ' + fmtH(carryIn.flokzu) + ' (Semana ' + prevNum + ')\n'; hasCarry = true; }
-      if (carryIn.segur > 0) { txt += '   ↑ Entrante: Seguridad ' + fmtH(carryIn.segur) + ' (Semana ' + prevNum + ')\n'; hasCarry = true; }
-      if (excess.flokzu > 0) { txt += '   ↓ Saliente: Flokzu ' + fmtH(excess.flokzu) + ' → Semana ' + nextNum + '\n'; hasCarry = true; }
-      if (excess.segur > 0) { txt += '   ↓ Saliente: Seguridad ' + fmtH(excess.segur) + ' → Semana ' + nextNum + '\n'; hasCarry = true; }
-      if (!hasCarry) txt += '   Sin arrastre.\n';
-      txt += '\n';
-
-      txt += ' [TOTALES VS META]\n';
-      txt += '   Flokzu:    ' + fmtH(total.flokzu) + ' / meta ' + fmtH(QUOTAS.flokzu) +
-        (excess.flokzu > 0 ? ' — excedente ' + fmtH(excess.flokzu) + ' → Semana ' + nextNum : ' — dentro de la meta') + '\n';
-      txt += '   Seguridad: ' + fmtH(total.segur) + ' / meta ' + fmtH(QUOTAS.segur) +
-        (excess.segur > 0 ? ' — excedente ' + fmtH(excess.segur) + ' → Semana ' + nextNum : ' — dentro de la meta') + '\n';
-      txt += '   Total:     ' + fmtH(total.flokzu + total.segur) + '\n\n';
+      txt += '   Seguridad: ' + fmtH(d.timer.segur) + '\n';
+      txt += '   Total:     ' + fmtH(d.timer.flokzu + d.timer.segur) + '\n\n';
 
       txt += ' [DETALLES]\n';
-      if (d.logs.length === 0 && d.meetings.length === 0) txt += '   Sin registros.\n';
+      if (d.logs.length === 0) txt += '   Sin registros.\n';
       d.logs.forEach(l => {
         const name = l.id === 'flokzu' ? 'Flokzu' : 'Seguridad';
         txt += '   • ' + l.fecha + ' - ' + name + ' - ' + l.duracion_legible + ': ' + l.descripcion + '\n';
-      });
-      d.meetings.forEach(m => {
-        const name = m.proyecto === 'flokzu' ? 'Flokzu' : 'Seguridad';
-        txt += '   • ' + m.fecha + ' ' + m.inicio + '–' + m.fin + ' - Reunión ' + name + ' - ' +
-          formatShortLegible(m.duracion_seg) + ': ' + m.descripcion + '\n';
       });
       txt += '\n' + line + '\n\n';
       return txt;
@@ -1396,76 +1132,51 @@
       URL.revokeObjectURL(url);
     }
 
-    function downloadDiario() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const dateKey = toDateKey(new Date());
-      const logs = getLogs().filter(l => l.timestamp >= today.getTime());
-      const meetings = getMeetings().filter(m => m.fecha === dateKey);
-
-      if (logs.length === 0 && meetings.length === 0) {
-        alert('No hay registros para hoy.');
-        return;
-      }
-
-      const dateStr = new Date().toLocaleDateString('es', { day: '2-digit', month: '2-digit', year: 'numeric' });
-      let txt = '========================================\n';
-      txt += ' REGISTRO DIARIO - ' + dateStr + '\n';
-      txt += '========================================\n\n';
-
-      let flokzuTimer = 0, segurTimer = 0, flokzuMeet = 0, segurMeet = 0;
-      logs.forEach(l => {
-        txt += formatDiarioEntry(l);
-        if (l.id === 'flokzu') flokzuTimer += l.duracion_seg;
-        else segurTimer += l.duracion_seg;
-      });
-      meetings.forEach(m => {
-        txt += formatMeetingEntry(m);
-        if (m.proyecto === 'flokzu') flokzuMeet += m.duracion_seg;
-        else segurMeet += m.duracion_seg;
-      });
-
-      txt += '----------------------------------------\n';
-      txt += ' Cronómetros:\n';
-      txt += '   Flokzu:    ' + fmtH(flokzuTimer) + '\n';
-      txt += '   Seguridad: ' + fmtH(segurTimer) + '\n';
-      txt += ' Reuniones:\n';
-      txt += '   Flokzu:    ' + fmtH(flokzuMeet) + '\n';
-      txt += '   Seguridad: ' + fmtH(segurMeet) + '\n';
-      txt += ' Total: ' + fmtH(flokzuTimer + segurTimer + flokzuMeet + segurMeet) + '\n';
-
-      downloadFile('diario.txt', txt);
-    }
-
     function downloadSemanal() {
       const weekStart = getWeekStart();
       const d = getWeekData(weekStart);
-      if (d.logs.length === 0 && d.meetings.length === 0) {
+      if (d.logs.length === 0) {
         alert('No hay registros esta semana.');
         return;
       }
+      downloadFile(weeklyTitle(weekStart) + '.txt', formatWeeklySummary(weekStart));
+    }
 
-      const ws = new Date(weekStart);
-      const we = new Date(weekStart);
-      we.setDate(we.getDate() + 6);
-      const weekNum = getWeekNumber(ws);
-      const p = x => String(x).padStart(2, '0');
-      const fmtDate = dt => p(dt.getDate()) + '-' + p(dt.getMonth() + 1);
-      const filename = 'semanal-S' + weekNum + '-' + ws.getFullYear() + '_' + fmtDate(ws) + '_' + fmtDate(we) + '.txt';
+    function getDownloadedWeeks() {
+      try { return JSON.parse(localStorage.getItem('cronometro_downloaded_weeks') || '[]'); }
+      catch { return []; }
+    }
 
-      downloadFile(filename, formatWeeklySummary(weekStart));
+    function autoDownloadPendingWeeks() {
+      const currentWeek = getWeekStart();
+      const downloaded = getDownloadedWeeks();
+      const pending = getAllDataWeeks()
+        .filter(ws => ws < currentWeek && !downloaded.includes(ws))
+        .sort((a, b) => a - b);
+      if (pending.length === 0) return;
+      pending.forEach(ws => {
+        downloadFile(weeklyTitle(ws) + '.txt', formatWeeklySummary(ws));
+        downloaded.push(ws);
+      });
+      localStorage.setItem('cronometro_downloaded_weeks', JSON.stringify(downloaded));
     }
 
     // ===== KEYBOARD SHORTCUTS =====
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeLogModal();
+      if (e.key === 'Escape') { closeLogModal(); closeEditModal(); }
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && pendingLog) {
         saveLogFromModal();
+      }
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && pendingEditIndex !== null) {
+        saveEditFromModal();
       }
     });
 
     // ===== INIT =====
     activeBreak = getBreak();
+    if (activeBreak && (!activeBreak.start || Date.now() - activeBreak.start > 6 * 3600e3)) {
+      endBreak(false);
+    }
 
     ['flokzu', 'segur'].forEach(id => {
       checkWeekRollover(id);
@@ -1476,12 +1187,11 @@
       });
     });
 
-    document.getElementById('mFecha').value = toDateKey(new Date());
     updateBreakUI();
-    renderMeetings();
     renderHistory();
     updateAutoSaveUI();
     checkWeeklyConsolidation();
+    autoDownloadPendingWeeks();
   </script>
 </body>
 </html>
