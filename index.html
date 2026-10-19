@@ -1093,23 +1093,43 @@
     function formatWeeklySummary(weekStart) {
       const d = getWeekData(weekStart);
 
-      const line = '════════════════════════════════════\n';
-      let txt = line;
-      txt += ' ' + weeklyTitle(weekStart) + '\n';
-      txt += line + '\n\n';
+      const eq = '='.repeat(50);
+      const dash = '-'.repeat(50);
+      const labels = ['Flokzu:', 'Seguridad de la información:', 'Total Horas Trabajadas en la Semana:'];
+      const pad = Math.max.apply(null, labels.map(l => l.length)) + 2;
 
-      txt += ' [CRONÓMETROS]\n';
-      txt += '   Flokzu:    ' + fmtH(d.timer.flokzu) + '\n';
-      txt += '   Seguridad: ' + fmtH(d.timer.segur) + '\n';
-      txt += '   Total:     ' + fmtH(d.timer.flokzu + d.timer.segur) + '\n\n';
+      let txt = eq + '\n';
+      txt += 'REPORTE DE HORAS TRABAJADAS\n';
+      txt += weeklyTitle(weekStart) + '\n';
+      txt += eq + '\n\n';
 
-      txt += ' [DETALLES]\n';
-      if (d.logs.length === 0) txt += '   Sin registros.\n';
-      d.logs.forEach(l => {
-        const name = l.id === 'flokzu' ? 'Flokzu' : 'Seguridad';
-        txt += '   • ' + l.fecha + ' - ' + name + ' - ' + l.duracion_legible + ': ' + l.descripcion + '\n';
+      txt += 'RESUMEN GENERAL:\n';
+      txt += '   ' + labels[0].padEnd(pad) + fmtH(d.timer.flokzu) + '\n';
+      txt += '   ' + labels[1].padEnd(pad) + fmtH(d.timer.segur) + '\n';
+      txt += '   ' + labels[2].padEnd(pad) + fmtH(d.timer.flokzu + d.timer.segur) + '\n\n';
+
+      txt += eq + '\n\n';
+      txt += '[DETALLES]\n';
+
+      const sections = [
+        { id: 'flokzu', title: 'FLOKZU', totalLabel: 'Total Flokzu: ', name: 'Flokzu' },
+        { id: 'segur', title: 'SEGURIDAD DE LA INFORMACIÓN', totalLabel: 'Total Seguridad de la información: ', name: 'Seguridad de la información' }
+      ];
+
+      sections.forEach((sec, i) => {
+        if (i > 0) txt += '\n\n';
+        txt += dash + '\n' + sec.title + '\n' + dash + '\n';
+        const items = d.logs.filter(l => l.id === sec.id);
+        if (items.length === 0) txt += 'Sin registros.\n';
+        items.forEach(l => {
+          const day = new Date(l.timestamp).toLocaleDateString('es', { weekday: 'long' });
+          const dayName = day.charAt(0).toUpperCase() + day.slice(1);
+          txt += '• ' + dayName + ' ' + l.fecha + ' - ' + sec.name + ' - ' + l.duracion_legible + ': ' + l.descripcion + '\n';
+        });
+        txt += '\n' + sec.totalLabel + fmtH(sec.id === 'flokzu' ? d.timer.flokzu : d.timer.segur) + '\n';
       });
-      txt += '\n' + line + '\n\n';
+
+      txt += '\n' + eq + '\n\n';
       return txt;
     }
 
