@@ -947,15 +947,19 @@
 
     // ===== HISTORY =====
     function renderHistory() {
-      const logs = getLogs();
       const container = document.getElementById('historyList');
-      if (logs.length === 0) {
-        container.innerHTML = '<p class="history__empty">Sin registros todavía. Pausa un cronómetro para registrar.</p>';
+      const weekStart = getWeekStart();
+      const weekEnd = weekStart + 7 * 86400000;
+      const entries = getLogs()
+        .map((log, idx) => ({ log, idx }))
+        .filter(e => e.log.timestamp >= weekStart && e.log.timestamp < weekEnd);
+      if (entries.length === 0) {
+        container.innerHTML = '<p class="history__empty">Sin registros todavía en esta semana. Pausa un cronómetro para registrar.</p>';
         return;
       }
-      const start = Math.max(0, logs.length - 15);
-      container.innerHTML = logs.slice(start).map((log, i) => {
-        const idx = start + i;
+      container.innerHTML = entries.slice(-15).reverse().map(e => {
+        const log = e.log;
+        const idx = e.idx;
         return '<div class="history__item history__item--' + log.id + '">' +
           '<div class="history__meta">' +
             '<span>' + escapeHtml(log.fecha) + '</span>' +
@@ -965,7 +969,7 @@
           '</div>' +
           '<div class="history__desc">' + escapeHtml(log.descripcion) + '</div>' +
         '</div>';
-      }).reverse().join('');
+      }).join('');
     }
 
     function escapeHtml(text) {
